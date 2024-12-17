@@ -36,13 +36,23 @@ class PackageSerializer(serializers.ModelSerializer):
 
 # Order Serializer
 class OrderSerializer(serializers.ModelSerializer):
-    packages = PackageSerializer(many=True, read_only=True)  # Nested packages
-    customer = CustomerSerializer(read_only=True)  # Nested customer details
-    operator = serializers.PrimaryKeyRelatedField(queryset=OperatorProfile.objects.all())  # Make operator writable
+    packages = PackageSerializer(many=True, read_only=True)
+    customer = CustomerSerializer(read_only=True)
+    operator = serializers.PrimaryKeyRelatedField(queryset=OperatorProfile.objects.all())
 
     class Meta:
         model = Order
         fields = '__all__'
+
+    def update(self, instance, validated_data):
+        # Check if operator is updated
+        new_operator = validated_data.get('operator', instance.operator)
+        if new_operator != instance.operator:
+            # Update operator for associated packages
+            instance.packages.update(operator=new_operator)
+
+        # Update the order instance
+        return super().update(instance, validated_data)
 
 
 class FileUploadSerializer(serializers.Serializer):
