@@ -48,7 +48,7 @@ Il progetto è progettato come un lavoro continuo per supportare l'auto-migliora
 ### Backend:
 - **Framework**: Django (Python)
 - **Database**: SQLite3
-- **Gestione dell'Ambiente**: `python-dotenv`
+- **Gestione dell'Ambiente**: `venv,python-dotenv`
 
 ### Frontend:
 - **Framework**: React (Vite)
